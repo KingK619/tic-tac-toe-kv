@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+#  Tic-Tac-Toe React App
+
+### Take a look : [tic-tac-toe](https://tic-tac-toe-kv.netlify.app/)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
