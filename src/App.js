@@ -1,24 +1,151 @@
-import logo from './logo.svg';
+import React, {useState} from 'react'
+
+import Icon from './components/Icon';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {Card,CardBody,Button,Col,Row,Container} from 'reactstrap'
+
+import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 
-function App() {
+
+const itemArray= new Array(9).fill("empty")
+
+const App = ()=>  {
+
+
+
+const [isCross,setIsCross] = useState(false)
+const [winMsg,setWinMsg] = useState('')
+
+
+// resposible to reload the game
+const reloadGame = ()=> {
+  setIsCross(false)
+  setWinMsg("")
+  itemArray.fill("empty",0,9)
+}
+
+// check the winner
+const checkIsWinner = () => {
+  if (
+    itemArray[0] === itemArray[1] &&
+    itemArray[0] === itemArray[2] &&
+    itemArray[0] !== "empty"
+  ) {
+    setWinMsg(`${itemArray[0]} won`);
+  } else if (
+    itemArray[3] !== "empty" &&
+    itemArray[3] === itemArray[4] &&
+    itemArray[4] === itemArray[5]
+  ) {
+    setWinMsg(`${itemArray[3]} won`);
+  } else if (
+    itemArray[6] !== "empty" &&
+    itemArray[6] === itemArray[7] &&
+    itemArray[7] === itemArray[8]
+  ) {
+    setWinMsg(`${itemArray[6]} won`);
+  } else if (
+    itemArray[0] !== "empty" &&
+    itemArray[0] === itemArray[3] &&
+    itemArray[3] === itemArray[6]
+  ) {
+    setWinMsg(`${itemArray[0]} won`);
+  } else if (
+    itemArray[1] !== "empty" &&
+    itemArray[1] === itemArray[4] &&
+    itemArray[4] === itemArray[7]
+  ) {
+    setWinMsg(`${itemArray[1]} won`);
+  } else if (
+    itemArray[2] !== "empty" &&
+    itemArray[2] === itemArray[5] &&
+    itemArray[5] === itemArray[8]
+  ) {
+    setWinMsg(`${itemArray[2]} won`);
+  } else if (
+    itemArray[0] !== "empty" &&
+    itemArray[0] === itemArray[4] &&
+    itemArray[4] === itemArray[8]
+  ) {
+    setWinMsg(`${itemArray[0]} won`);
+  } else if (
+    itemArray[2] !== "empty" &&
+    itemArray[2] === itemArray[4] &&
+    itemArray[4] === itemArray[6]
+  ) {
+    setWinMsg(`${itemArray[2]} won`);
+  }
+}
+
+// responsible for changing item ( after clicking )
+const changeItem = (itemNumber)=>{
+  if(winMsg){
+    return toast('🥳 ' + winMsg,{type:"success"})
+  }
+
+  if(itemArray[itemNumber] === "empty"){
+    itemArray[itemNumber] = isCross ? "cross" : "circle"
+    setIsCross(!isCross)
+  }else{
+    return toast.error('⚠️ Already Filled ⚠️', {
+      position: "bottom-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      });
+  }
+
+  checkIsWinner();
+
+}
+  
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    
+      <Container className="p-5">
+        <h1>Tic • Tac • Toe </h1>
+        <hr/><hr/>
+        <ToastContainer position="bottom-center"/>
+        <Row>
+          <Col md={6} className="offset-md-3">
+
+              { winMsg ? (
+                <div className ="mb-2 mt-2">
+                  <h1 className="text-success text-uppercase text-center">
+                    {winMsg}
+                  </h1>  
+                  <Button className="btn" color="success" block onClick={reloadGame} >
+                    Reset the Game
+                  </Button>
+                </div>
+              ) : (
+                <h1 className="text-center text-warning">
+                  {isCross ? "❌'s" : "⭕'s"} turns 
+                     
+                </h1>
+              )}
+
+
+              <div className="grid">
+
+                {itemArray.map((item,index)=>(
+                  <Card color="warning" onClick={()=> changeItem(index)}>
+                    <CardBody className="box animate">
+                      <Icon name={item} />
+                    </CardBody>
+                  </Card>
+                ))}
+
+              </div>
+
+          </Col>
+        </Row>
+      </Container>
+
   );
 }
 
