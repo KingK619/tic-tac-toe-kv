@@ -127,6 +127,13 @@ const changeItem = (itemNumber)=>{
                     Reset the Game
                   </Button>
                 </div>
+              ): !itemArray.includes("empty") ?  (
+                <div className="mb-2 mt-2">
+                  <h1 className= "text-info text-uppercase text-center">
+                  It's a Tie
+                  </h1>
+                  <Button color = "success" block onClick={reloadGame}>Reload the Game</Button>
+                </div>
               ) : (
                 <h1 className="text-center text-warning">
                   {isCross ? "❌'s" : "⭕'s"} turns 
